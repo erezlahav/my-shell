@@ -8,7 +8,7 @@
 #include <pwd.h>
 #include "parser.h"
 #include "commands.h"
-
+#include "pipe.h"
 
 
 
