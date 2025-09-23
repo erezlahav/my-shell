@@ -4,10 +4,10 @@
 
 #define ARGS_NUMBER 64
 #define MAX_COMMAND_LENGTH 20
-#define DELIM_CHARS " \n\t\r"
-char** parser(char* command){
+
+char** parser(char* command,char* delim_chars){
 	char** parsed_commands = malloc(sizeof(char*) * ARGS_NUMBER);
-	char* curr_string = strtok(command, DELIM_CHARS);
+	char* curr_string = strtok(command, delim_chars);
 	int current_index = 0;
 
 	while(curr_string != NULL && current_index < ARGS_NUMBER) {
@@ -16,7 +16,7 @@ char** parser(char* command){
     	parsed_commands[current_index][MAX_COMMAND_LENGTH-1] = '\0';
 
     	current_index++;
-    	curr_string = strtok(NULL, DELIM_CHARS);
+    	curr_string = strtok(NULL, delim_chars);
 	}
 
 	parsed_commands[current_index] = NULL;

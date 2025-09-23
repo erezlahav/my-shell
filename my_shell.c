@@ -10,7 +10,7 @@
 #include "commands.h"
 #include "pipe.h"
 
-
+#define DELIM_CHARS " \n\t\r"
 
 int main(){
 	while(1){
@@ -20,7 +20,7 @@ int main(){
 		char user_input[50];
 		fgets(user_input,sizeof(user_input),stdin);
 		user_input[sizeof(user_input)-1] = '\x00';
-		char** input_commands = parser(user_input);
+		char** input_commands = parser(user_input,DELIM_CHARS);
 		char* first_command = input_commands[0];
 		if(strcmp(first_command,"pwd") == 0){
 			my_pwd();
