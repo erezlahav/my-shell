@@ -11,13 +11,21 @@
 
 
 
+struct internal_command implemented_internals[] = {
+    {"cd", my_cd},
+    {"ls", my_ls},
+    {"whoami", my_whoami},
+    {"pwd", my_pwd},
+    {NULL, NULL}
+};
 
 
 
 
 
-
-int my_ls(){
+int my_ls(char** args){
+	if(strcmp(args[0],"ls") != 0){printf("error calling ls");return 0;}
+	if(args[1] != NULL){printf("error, in internal ls there is no parameters");}
         char cwd[CWD_SIZE];
         getcwd(cwd,CWD_SIZE);
         DIR* dp = opendir(cwd);
@@ -37,7 +45,9 @@ int my_ls(){
 }
 
 
-int my_pwd(){
+int my_pwd(char** args){
+	if(strcmp(args[0],"pwd") != 0){printf("error calling pwd");return 0;}
+        if(args[1] != NULL){printf("error, in internal pwd there is no parameters");return 0;}
         char cwd[CWD_SIZE];
         getcwd(cwd,CWD_SIZE);
         if(cwd == NULL){
@@ -50,7 +60,9 @@ int my_pwd(){
 
 
 
-int my_whoami(){
+int my_whoami(char** args){
+        if(strcmp(args[0],"whoami") != 0){printf("error calling whoami");return 0;}
+        if(args[1] != NULL){printf("error, in internal whoami there is no parameters");return 0;}
         uid_t uid = getuid();
 
         struct passwd* pwuid = getpwuid(uid);
@@ -61,8 +73,10 @@ int my_whoami(){
         printf("%s\n",pwuid->pw_name);
 }
 
-int my_cd(char* target_dir){
-	if(chdir(target_dir) != 0){
+int my_cd(char** args){
+        if(strcmp(args[0],"cd") != 0){printf("error calling cd");return 0;}
+        if(args[2] != NULL){printf("error, in internal cd there is too many parameters");return 0;}
+	if(chdir(args[1]) != 0){
 		printf("error no %d, %s\n",errno,strerror(errno));
 	}
 }
