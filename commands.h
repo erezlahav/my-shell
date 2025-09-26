@@ -1,5 +1,4 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#pragma once
 
 typedef int (*func_pointer)(char** args);
 
@@ -7,7 +6,7 @@ int my_ls(char** args);
 int my_pwd(char** args);
 int my_whoami(char** args);
 int my_cd(char** args);
-
+int my_exit(char** args);
 
 struct internal_command{
         char* func_name;
@@ -16,4 +15,4 @@ struct internal_command{
 };
 
 extern struct internal_command implemented_internals[];
-#endif
+

@@ -5,8 +5,9 @@
 #include <errno.h>
 #include <pwd.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include "commands.h"
+
 #define CWD_SIZE 50
 
 
@@ -16,11 +17,14 @@ struct internal_command implemented_internals[] = {
     {"ls", my_ls},
     {"whoami", my_whoami},
     {"pwd", my_pwd},
+    {"exit",my_exit},
     {NULL, NULL}
 };
 
 
-
+int my_exit(char** args){
+	exit(0);
+}
 
 
 int my_ls(char** args){

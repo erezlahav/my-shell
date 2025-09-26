@@ -8,7 +8,7 @@
 #include "parser.h"
 #include "pipe.h"
 #include "utils.h"
-
+#include "redirection.h"
 
 
 char* check_command_in_PATH_env(char* command){
@@ -86,21 +86,6 @@ char* find_delim_operator(char** args){
 }
 
 
-int execute_external_command(char* full_path_command,char** const argv,char** const env){
-	if(getpid() == 0){
-		int res = execve(full_path_command,argv,env);
-	}
-	else{
-		pid_t child_pid = fork();
-		if(child_pid == 0){
-			int res = execve(full_path_command,argv,env);
-			exit(1);
-			if(res == -1){return 0;}
-		}
-		waitpid(child_pid,NULL,0);
-		return 1;
-	}
-}
 
 int handle_command(char** args_command){
 	char* delim_operator;
@@ -114,8 +99,13 @@ int handle_command(char** args_command){
 		if(strcmp(delim_operator,"|") == 0){
 
 			my_pipe(splitted_args[0],splitted_args[1]);
+			return 1;
 		}
 
+		else if(strcmp(delim_operator,">") == 0){
+			my_write_redirection(splitted_args[0],splitted_args[1][0]);
+			return 1;
+		}
 
 	}
 	else if(delim_operator == NULL){
@@ -130,8 +120,17 @@ int handle_command(char** args_command){
 		else{
 			external_function_path = check_command_in_PATH_env(command);
 			if(external_function_path != NULL){
-				int res = execute_external_command(external_function_path,args_command,NULL);
-				if(res == 1){return 1;}
+				pid_t pid = fork();
+				if(pid == 0){
+					printf("%s\n",args_command[0]);
+					printf("%s\n",getenv("PATH"));
+					execve(external_function_path, args_command,NULL);
+		            		perror("execvp failed");
+            				exit(1);
+				}
+				else{
+					waitpid(pid,NULL,0);
+				}
 			}
 
 		}
@@ -142,8 +141,3 @@ int handle_command(char** args_command){
 }
 
 
-int main(){
-	char cmd[] = "ls | grep a";
-	char** args= parser(cmd," \r\t\n");
-	handle_command(args);
-}
