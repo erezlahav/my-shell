@@ -122,14 +122,13 @@ int handle_command(char** args_command){
 			if(external_function_path != NULL){
 				pid_t pid = fork();
 				if(pid == 0){
-					printf("%s\n",args_command[0]);
-					printf("%s\n",getenv("PATH"));
 					execve(external_function_path, args_command,NULL);
 		            		perror("execvp failed");
             				exit(1);
 				}
 				else{
 					waitpid(pid,NULL,0);
+					return 1;
 				}
 			}
 
