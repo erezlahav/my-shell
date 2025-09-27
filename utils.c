@@ -107,6 +107,14 @@ int handle_command(char** args_command){
 			return 1;
 		}
 
+                else if(strcmp(delim_operator,"<") == 0){
+                        my_read_redirection(splitted_args[0],splitted_args[1][0]);
+                        return 1;
+                }
+		else{
+			printf("invalid operator");
+			return 0;
+		}
 	}
 	else if(delim_operator == NULL){
 		char* command = args_command[0];
