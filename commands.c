@@ -24,6 +24,7 @@ struct internal_command implemented_internals[] = {
 
 int my_exit(char** args){
 	exit(0);
+	return 1;
 }
 
 
@@ -31,7 +32,7 @@ int my_ls(char** args){
 	if(strcmp(args[0],"ls") != 0){printf("error calling ls");return 0;}
 	if(args[1] != NULL){printf("error, in internal ls there is no parameters");}
         char cwd[CWD_SIZE];
-        getcwd(cwd,CWD_SIZE);
+        getcwd(cwd,sizeof(cwd));
         DIR* dp = opendir(cwd);
         if(dp == NULL){
                 printf("error\n");
@@ -45,6 +46,7 @@ int my_ls(char** args){
                 }
                 printf("%s\n",curr_f->d_name);
         }
+	return 1;
 
 }
 
@@ -53,11 +55,7 @@ int my_pwd(char** args){
 	if(strcmp(args[0],"pwd") != 0){printf("error calling pwd");return 0;}
         if(args[1] != NULL){printf("error, in internal pwd there is no parameters");return 0;}
         char cwd[CWD_SIZE];
-        getcwd(cwd,CWD_SIZE);
-        if(cwd == NULL){
-                printf("errno = %d, %s\n",errno,strerror(errno));
-                return 0;
-        }
+        getcwd(cwd,sizeof(cwd));
         printf("%s\n",cwd);
         return 1;
 }
@@ -75,6 +73,7 @@ int my_whoami(char** args){
         }
 
         printf("%s\n",pwuid->pw_name);
+	return 1;
 }
 
 int my_cd(char** args){
@@ -83,6 +82,7 @@ int my_cd(char** args){
 	if(chdir(args[1]) != 0){
 		printf("error no %d, %s\n",errno,strerror(errno));
 	}
+	return 1;
 }
 
 

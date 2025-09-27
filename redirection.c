@@ -2,12 +2,11 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <stdio.h>
 #include "utils.h"
 
 
-
 int my_write_redirection(char** process_args,char* filename){
-	if(access(filename,W_OK) != 0){return 0;}
 	int pipefd[2];
 	pipe(pipefd);
 
@@ -20,7 +19,8 @@ int my_write_redirection(char** process_args,char* filename){
 		close(pipefd[1]);
 		close(pipefd[0]);
 		close(fd);
-		handle_command(process_args);
+		int res = handle_command(process_args);
+		if(res == 0){printf("%s:command not found",process_args[0]);}
 		exit(0);
 	}
 
@@ -29,17 +29,21 @@ int my_write_redirection(char** process_args,char* filename){
 
 	if(second_child_pid == 0){
 		size_t n;
+		close(pipefd[1]);
 		while((n = read(pipefd[0],read_buf,1000)) != 0){
 			int res = write(fd,read_buf,n);
 			if(res == -1){break;}
 		}
+		close(pipefd[0]);
+		close(fd);
 		exit(0);
 	}
 
 
 	close(pipefd[0]);
 	close(pipefd[1]);
+	close(fd);
 	waitpid(first_child_pid,NULL,0);
 	waitpid(second_child_pid,NULL,0);
-
+	return 1;
 }

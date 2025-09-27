@@ -9,6 +9,7 @@
 int my_pipe(char** const first_process_args,char** const second_process_args){
 	int pipefd[2];
 	int res = pipe(pipefd);
+	if(res == -1){return 0;}
 	pid_t first_command_pid;
 	pid_t second_command_pid;
 	first_command_pid = fork();
@@ -34,7 +35,7 @@ int my_pipe(char** const first_process_args,char** const second_process_args){
 	close(pipefd[1]);
 	waitpid(first_command_pid,NULL,0);
 	waitpid(second_command_pid,NULL,0);
-
+	return 1;
 }
 
 
