@@ -1,8 +1,5 @@
 # my_shell
 
-[![Language: C](https://img.shields.io/badge/language-C-blue.svg)](https://www.gnu.org/software/gcc/)  
-[![License](https://img.shields.io/badge/license-Educational-lightgrey.svg)](LICENSE)
-
 **my_shell** is a custom command-line shell written in C, supporting **internal and external commands**, **pipes**, and **I/O redirection**, while showcasing low-level process and memory management.
 
 ---
