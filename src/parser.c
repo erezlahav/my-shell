@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #define ARGS_NUMBER 64
-#define MAX_COMMAND_LENGTH 50
+#define MAX_COMMAND_LENGTH 256
 
 char** parser(char* str,char* delim_chars){
 	char temp_command[MAX_COMMAND_LENGTH];
